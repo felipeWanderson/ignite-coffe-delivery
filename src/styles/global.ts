@@ -8,11 +8,11 @@ export const GlobalStyle = createGlobalStyle`
   }
   :focus {
     outline: none;
-    box-shadow: 0 0 0 2px #DBAC2C;
+    box-shadow: 0 0 0 2px ${(props) => props.theme['yellow-500']} ;
   }
   body {
-    background: #FAFAFA;
-    color: #403937;
+    background: ${(props) => props.theme.background};
+    color: ${(props) => props.theme['gray-800']};
     -webkit-font-smoothing: antialiased;
   }
   body, input, textarea, button {
