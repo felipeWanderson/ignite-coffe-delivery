@@ -1,11 +1,8 @@
-import banner from '../../assets/images/banner.svg'
-import { Intro } from './styles'
+import { Intro } from '../../components/Intro'
 export function Home() {
   return (
     <>
-      <Intro>
-        <img src={banner} alt="" />
-      </Intro>
+      <Intro />
     </>
   )
 }
