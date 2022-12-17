@@ -10,15 +10,19 @@ export const GlobalStyle = createGlobalStyle`
     outline: none;
     box-shadow: 0 0 0 2px ${(props) => props.theme['yellow-500']} ;
   }
+
+  html, body, #root {
+    font-size: 62.5%; /* 1rem = 10px */
+    font-family: 'Baloo 2', cursive;
+  }
   body {
     background: ${(props) => props.theme.background};
     color: ${(props) => props.theme['gray-800']};
     -webkit-font-smoothing: antialiased;
   }
-  body, input, textarea, button {
+  input, textarea, button {
     font-family: 'Baloo 2', cursive;
     font-weight: 800;
-    font-size: 62.5%;
   }
 
   button {

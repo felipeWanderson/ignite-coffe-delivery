@@ -9,32 +9,37 @@ export const IntroContainer = styled.div`
   background: url('/src/assets/images/background-intro.svg') no-repeat;
   background-size: cover;
 
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `
 export const IntroContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 60px;
+  gap: 6rem;
+
+  max-width: 58.8rem;
+  width: 100%;
 `
 export const IntroContentTitles = styled.div`
   h3 {
     font-style: normal;
     font-weight: 800;
-    font-size: 54px;
+    font-size: 4.6rem;
     line-height: 130%;
     color: ${(props) => props.theme['gray-900']};
     word-break: break-word;
-    margin-bottom: 16px;
+    margin-bottom: 1.6rem;
   }
 
   span {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
-    font-size: 26px;
+    font-size: 2rem;
     line-height: 130%;
     word-break: break-word;
+    font-stretch: 100;
   }
 `
 export const IntroImage = styled.div`
@@ -43,31 +48,34 @@ export const IntroImage = styled.div`
   justify-content: center;
 
   img {
-    width: 476px;
-    height: 360px;
+    width: 47.6rem;
+    height: 36rem;
   }
 `
 
 export const IntroItemsContainer = styled.div`
+  max-width: 56.7rem;
   width: 100%;
 
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  grid-template-columns: repeat(2, 29.4rem);
+
+  gap: 2rem 0;
 `
 export const IntroItem = styled.div`
+  min-width: 23.1rem;
+  max-width: 29.4rem;
   width: 100%;
-
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 1.2rem;
 
   span {
-    flex-grow: 1;
+    flex: 1;
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 1.6rem;
     line-height: 130%;
     color: ${(props) => props.theme['gray-600']};
   }
@@ -85,8 +93,8 @@ interface IntroItemIconProps {
 }
 
 export const IntroItemIcon = styled.div<IntroItemIconProps>`
-  width: 32px;
-  height: 32px;
+  width: 3.2rem;
+  height: 3.2rem;
 
   display: flex;
   align-items: center;

@@ -84,8 +84,8 @@ export const GeoLocalizationButton = styled.button`
 `
 export const Notification = styled.div`
   position: absolute;
-  bottom: 32px;
-  left: 32px;
+  bottom: 2.4rem;
+  left: 2.4rem;
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
@@ -98,7 +98,7 @@ export const Notification = styled.div`
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 700;
-  font-size: 12px;
+  font-size: 1.2rem;
 
   color: ${(props) => props.theme.white};
 `

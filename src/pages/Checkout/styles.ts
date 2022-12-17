@@ -6,11 +6,11 @@ export const CheckoutContainer = styled.main`
   display: flex;
   justify-content: space-between;
 
-  gap: 32px;
+  gap: 3.2rem;
 `
 
 export const InfoOrderContainer = styled.section`
-  max-width: 640px;
+  max-width: 64rem;
   width: 100%;
   height: 100%;
 `
@@ -19,8 +19,8 @@ export const AddressContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 40px;
-  gap: 32px;
+  padding: 4rem;
+  gap: 3.2rem;
 
   background: ${(props) => props.theme['gray-100']};
   border-radius: 6px;
@@ -30,7 +30,7 @@ export const AddressHeader = styled.div`
   display: flex;
   align-items: flex-start;
 
-  gap: 8px;
+  gap: 0.8rem;
 `
 export const Icon = styled.div`
   svg {
@@ -49,7 +49,7 @@ export const Info = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 2px;
+  gap: 0.2rem;
 `
 
 export const InfoText = styled.span`
@@ -60,15 +60,15 @@ export const InfoText = styled.span`
   color: ${(props) => props.theme['gray-800']};
 `
 export const InfoTitle = styled(InfoText)`
-  font-size: 16px;
+  font-size: 1.6rem;
 `
 export const InfoSubTitle = styled(InfoText)`
-  font-size: 14px;
+  font-size: 1.4rem;
 `
 export const ResumeOrder = styled.section`
   border: 1px solid #000;
 
-  max-width: 448px;
+  max-width: 44.8rem;
   width: 100%;
   height: 100%;
 `
@@ -76,11 +76,11 @@ export const ResumeOrder = styled.section`
 export const Title = styled.h3`
   font-style: normal;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 1.8rem;
   line-height: 130%;
 
   color: ${(props) => props.theme['gray-800']};
-  margin-bottom: 16px;
+  margin-bottom: 1.6rem;
 `
 
 export const FormAddress = styled.form``

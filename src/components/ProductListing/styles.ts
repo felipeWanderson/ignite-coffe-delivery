@@ -12,31 +12,31 @@ export const ProductListingHeader = styled.header`
   h3 {
     font-style: normal;
     font-weight: 800;
-    font-size: 32px;
+    font-size: 3.2rem;
     line-height: 130%;
     color: ${(props) => props.theme['gray-800']};
   }
-  margin-bottom: 38px;
+  margin-bottom: 3.8rem;
 `
 
 export const FiltersContainer = styled.aside`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.8rem;
 `
 
 export const Filter = styled.button`
   background: transparent;
-  padding: 6px 12px;
-  gap: 8px;
+  padding: 0.6rem 1.2rem;
+  gap: 8rem;
 
-  border: 1px solid ${(props) => props.theme['yellow-500']};
-  border-radius: 100px;
+  border: 0.1rem solid ${(props) => props.theme['yellow-500']};
+  border-radius: 10rem;
 
   font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: 700;
-  font-size: 10px;
+  font-size: 1rem;
   line-height: 130%;
   text-transform: uppercase;
   color: ${(props) => props.theme['yellow-700']};
@@ -49,5 +49,5 @@ export const ProductContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
 
-  gap: 32px;
+  gap: 3.2rem;
 `
