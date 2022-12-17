@@ -22,7 +22,7 @@ export function Header() {
           <MapPin size={22} weight="fill" />
           <span>São Luís, MA</span>
         </GeoLocalizationButton>
-        <NavLink to="#">
+        <NavLink to="/checkout">
           <ShoppingCart size={22} weight="fill" />
           <Notification>3</Notification>
         </NavLink>
