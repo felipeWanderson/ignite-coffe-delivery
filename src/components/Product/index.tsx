@@ -12,26 +12,48 @@ import {
   Tag,
   TagsContainer,
 } from './styles'
-import imgCoffe from '../../assets/images/expresso-tradicional.png'
 import { Minus, Plus, ShoppingCartSimple } from 'phosphor-react'
 
-export function Product() {
+interface ProductData {
+  id: string
+  image_url: string
+  tags: string[]
+  title: string
+  description: string
+  price: number
+  stock: number
+}
+
+interface ProductProps {
+  data: ProductData
+}
+
+export function Product({ data }: ProductProps) {
+  const numerFormat = (value: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    })
+      .format(value)
+      .replace('R$', '')
+      .trim()
+  }
   return (
     <ProductContainer>
-      <img src={imgCoffe} alt="" />
+      <img src={data.image_url} alt="" />
       <TagsContainer>
-        <Tag>
-          <span>Tradicional</span>
-        </Tag>
+        {data.tags.map((tag) => (
+          <Tag key={tag}>
+            <span>{tag}</span>
+          </Tag>
+        ))}
       </TagsContainer>
-      <ProductName>Expresso Tradicional</ProductName>
-      <ProductDescription>
-        O tradicional café feito com água quente e grãos moídos
-      </ProductDescription>
+      <ProductName>{data.title}</ProductName>
+      <ProductDescription>{data.description}</ProductDescription>
       <Buy>
         <ProductPrice>
           <span>R$</span>
-          <strong>9,90</strong>
+          <strong>{numerFormat(data.price)}</strong>
         </ProductPrice>
 
         <BuyAction>

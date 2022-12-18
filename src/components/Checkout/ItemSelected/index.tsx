@@ -11,7 +11,7 @@ import {
   RemoveButton,
 } from './styled'
 
-import imgCoffe from '../../../assets/images/expresso-tradicional.png'
+import imgCoffe from '../../../assets/images/coffe-expresso-tradicional.png'
 import { Minus, Plus, Trash } from 'phosphor-react'
 import { defaultTheme } from '../../../styles/themes/defaults'
 

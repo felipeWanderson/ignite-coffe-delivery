@@ -32,7 +32,7 @@ export const Tag = styled.div`
   margin-bottom: 1.6rem;
   padding: 0.4rem 0.8rem;
   background: ${(props) => props.theme['yellow-300']};
-  border-radius: 100%;
+  border-radius: 100px;
 
   span {
     font-family: 'Roboto';

@@ -7,7 +7,21 @@ import {
   ProductListingHeader,
 } from './styles'
 
-export function ProductListing() {
+interface ProductProps {
+  id: string
+  image_url: string
+  tags: string[]
+  title: string
+  description: string
+  price: number
+  stock: number
+}
+
+interface ProductListingProps {
+  products: ProductProps[]
+}
+
+export function ProductListing({ products }: ProductListingProps) {
   return (
     <ProductListContainer>
       <ProductListingHeader>
@@ -22,20 +36,9 @@ export function ProductListing() {
         </FiltersContainer>
       </ProductListingHeader>
       <ProductContainer>
-        <Product />
-        <Product />
-        <Product />
-        <Product />
-        <Product />
-        <Product />
-        <Product />
-        <Product />
-        <Product />
-        <Product />
-        <Product />
-        <Product />
-        <Product />
-        <Product />
+        {products.map((product) => (
+          <Product key={product.id} data={product} />
+        ))}
       </ProductContainer>
     </ProductListContainer>
   )
