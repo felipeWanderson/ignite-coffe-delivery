@@ -31,7 +31,9 @@ export function ResumeOrder() {
           </PaymentItem>
         </ResumePayment>
 
-        <PlaceOrderButton>confirmar pedido</PlaceOrderButton>
+        <PlaceOrderButton to="/checkout/order-confirmation">
+          confirmar pedido
+        </PlaceOrderButton>
       </Resume>
     </ResumeOrderContainer>
   )

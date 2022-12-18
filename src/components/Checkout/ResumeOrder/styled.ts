@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
 export const ResumeOrderContainer = styled.section`
@@ -71,7 +72,7 @@ export const PaymentItem = styled.div<PaymentItemProps>`
       }
     `}
 `
-export const PlaceOrderButton = styled.button`
+export const PlaceOrderButton = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -94,6 +95,7 @@ export const PlaceOrderButton = styled.button`
   line-height: 160%;
 
   text-transform: uppercase;
+  text-decoration: none;
 
   color: ${(props) => props.theme.white};
   font-stretch: 100;
