@@ -1,4 +1,5 @@
 import { MapPinLine } from 'phosphor-react'
+import { FormAddress } from '../../components/Forms/FormAddress'
 import {
   AddressContainer,
   AddressHeader,
@@ -10,7 +11,6 @@ import {
   Info,
   InfoTitle,
   InfoSubTitle,
-  FormAddress,
 } from './styles'
 
 export function Checkout() {
@@ -31,9 +31,7 @@ export function Checkout() {
             </Info>
           </AddressHeader>
 
-          <FormAddress>
-            <input type="text" />
-          </FormAddress>
+          <FormAddress />
         </AddressContainer>
       </InfoOrderContainer>
 

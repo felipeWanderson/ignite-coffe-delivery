@@ -82,5 +82,3 @@ export const Title = styled.h3`
   color: ${(props) => props.theme['gray-800']};
   margin-bottom: 1.6rem;
 `
-
-export const FormAddress = styled.form``
