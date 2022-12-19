@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 export const HeaderContainer = styled.header`
@@ -7,7 +8,7 @@ export const HeaderContainer = styled.header`
   justify-content: space-between;
 `
 
-export const ImageContainer = styled.div`
+export const ImageContainer = styled(Link)`
   width: 8.5rem;
   width: 4rem;
 `

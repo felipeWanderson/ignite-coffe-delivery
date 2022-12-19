@@ -16,7 +16,7 @@ export function Header() {
   const { quantityItensInCart = 0 } = useContext(OrderContext)
   return (
     <HeaderContainer>
-      <ImageContainer>
+      <ImageContainer to="/">
         <img src={logo} alt="" />
       </ImageContainer>
 
