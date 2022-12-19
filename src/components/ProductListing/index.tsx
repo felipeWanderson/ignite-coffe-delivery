@@ -1,3 +1,5 @@
+import { useContext } from 'react'
+import { ProductListingContext } from '../../contexts/ProductListingContext'
 import { Product } from '../Product'
 import {
   Filter,
@@ -7,32 +9,31 @@ import {
   ProductListingHeader,
 } from './styles'
 
-interface ProductProps {
-  id: string
-  image_url: string
-  tags: string[]
-  title: string
-  description: string
-  price: number
-  stock: number
-}
+export function ProductListing() {
+  const { products, filters, handleSetSelectedFilter, selectedFilter } =
+    useContext(ProductListingContext)
 
-interface ProductListingProps {
-  products: ProductProps[]
-}
-
-export function ProductListing({ products }: ProductListingProps) {
   return (
     <ProductListContainer>
       <ProductListingHeader>
         <h3>Nossos Café</h3>
 
         <FiltersContainer>
-          <Filter>Tradicional</Filter>
-          <Filter>Especial</Filter>
-          <Filter>Com Leite</Filter>
-          <Filter>Alcoólico</Filter>
-          <Filter>Gelado</Filter>
+          <Filter
+            onClick={() => handleSetSelectedFilter('all')}
+            active={selectedFilter === 'all'}
+          >
+            Todos
+          </Filter>
+          {filters.map((filter) => (
+            <Filter
+              key={filter.id}
+              onClick={() => handleSetSelectedFilter(filter.name)}
+              active={selectedFilter === filter.name}
+            >
+              {filter.name}
+            </Filter>
+          ))}
         </FiltersContainer>
       </ProductListingHeader>
       <ProductContainer>

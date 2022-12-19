@@ -13,6 +13,8 @@ import {
   TagsContainer,
 } from './styles'
 import { Minus, Plus, ShoppingCartSimple } from 'phosphor-react'
+import { useContext, useState } from 'react'
+import { OrderContext } from '../../contexts/OrderContext'
 
 interface ProductData {
   id: string
@@ -29,6 +31,20 @@ interface ProductProps {
 }
 
 export function Product({ data }: ProductProps) {
+  const [quantity, setQuantity] = useState(1)
+
+  const { addToCart } = useContext(OrderContext)
+
+  const handleIncrementQuantity = () => {
+    setQuantity((prevState) => prevState + 1)
+  }
+  const handleDecrementQuantity = () => {
+    setQuantity((prevState) => prevState - 1)
+  }
+
+  const isDisabledIncremetButton = quantity === data.stock
+  const isDisabledDecremetButton = quantity === 1
+
   const numerFormat = (value: number) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -58,16 +74,22 @@ export function Product({ data }: ProductProps) {
 
         <BuyAction>
           <Quantity>
-            <DecrementButton>
+            <DecrementButton
+              disabled={isDisabledDecremetButton}
+              onClick={handleDecrementQuantity}
+            >
               <Minus size={14} />
             </DecrementButton>
-            <span>1</span>
-            <IncrementButton>
+            <span>{quantity}</span>
+            <IncrementButton
+              disabled={isDisabledIncremetButton}
+              onClick={handleIncrementQuantity}
+            >
               <Plus size={14} />
             </IncrementButton>
           </Quantity>
 
-          <AddToCartButton>
+          <AddToCartButton onClick={() => addToCart(data, quantity)}>
             <ShoppingCartSimple size={22} weight="fill" />
           </AddToCartButton>
         </BuyAction>

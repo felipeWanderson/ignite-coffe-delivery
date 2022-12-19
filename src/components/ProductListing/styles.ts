@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const ProductListContainer = styled.div`
   padding: 3.2rem 16rem;
@@ -25,7 +25,10 @@ export const FiltersContainer = styled.aside`
   gap: 0.8rem;
 `
 
-export const Filter = styled.button`
+interface FiltersProps {
+  active?: boolean
+}
+export const Filter = styled.button<FiltersProps>`
   background: transparent;
   padding: 0.6rem 1.2rem;
   gap: 8rem;
@@ -42,6 +45,16 @@ export const Filter = styled.button`
   color: ${(props) => props.theme['yellow-700']};
 
   cursor: pointer;
+
+  &:focus {
+    box-shadow: none;
+  }
+
+  ${(props) =>
+    props.active &&
+    css`
+      border: 0.2rem solid ${(props) => props.theme['yellow-500']};
+    `}
 `
 
 export const ProductContainer = styled.div`

@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const ProductContainer = styled.div`
   display: flex;
@@ -125,18 +125,42 @@ export const QuantityButton = styled.button`
   background: transparent;
 `
 export const IncrementButton = styled(QuantityButton)`
-  svg {
-    line {
-      stroke: ${(props) => props.theme['purple-500']};
-    }
-  }
+  ${(props) =>
+    props.disabled
+      ? css`
+          cursor: not-allowed;
+          svg {
+            line {
+              stroke: ${(props) => props.theme['gray-700']};
+            }
+          }
+        `
+      : css`
+          svg {
+            line {
+              stroke: ${(props) => props.theme['purple-500']};
+            }
+          }
+        `}
 `
 export const DecrementButton = styled(QuantityButton)`
-  svg {
-    line {
-      stroke: ${(props) => props.theme['purple-500']};
-    }
-  }
+  ${(props) =>
+    props.disabled
+      ? css`
+          cursor: not-allowed;
+          svg {
+            line {
+              stroke: ${(props) => props.theme['gray-700']};
+            }
+          }
+        `
+      : css`
+          svg {
+            line {
+              stroke: ${(props) => props.theme['purple-500']};
+            }
+          }
+        `}
 `
 
 export const AddToCartButton = styled.button`
