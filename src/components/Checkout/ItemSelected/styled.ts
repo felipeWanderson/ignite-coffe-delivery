@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const ItemSelectedContainer = styled.div`
   width: 100%;
@@ -75,8 +75,44 @@ export const QuantityButton = styled.button`
   border: none;
   background: transparent;
 `
-export const IncrementButton = styled(QuantityButton)``
-export const DecrementButton = styled(QuantityButton)``
+export const IncrementButton = styled(QuantityButton)`
+  ${(props) =>
+    props.disabled
+      ? css`
+          cursor: not-allowed;
+          svg {
+            line {
+              stroke: ${(props) => props.theme['gray-700']};
+            }
+          }
+        `
+      : css`
+          svg {
+            line {
+              stroke: ${(props) => props.theme['purple-500']};
+            }
+          }
+        `}
+`
+export const DecrementButton = styled(QuantityButton)`
+  ${(props) =>
+    props.disabled
+      ? css`
+          cursor: not-allowed;
+          svg {
+            line {
+              stroke: ${(props) => props.theme['gray-700']};
+            }
+          }
+        `
+      : css`
+          svg {
+            line {
+              stroke: ${(props) => props.theme['purple-500']};
+            }
+          }
+        `}
+`
 
 export const RemoveButton = styled(DefautButton)`
   cursor: pointer;

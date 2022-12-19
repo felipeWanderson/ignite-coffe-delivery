@@ -15,7 +15,7 @@ import imgCoffe from '../../../assets/images/coffe-expresso-tradicional.png'
 import { Minus, Plus, Trash } from 'phosphor-react'
 import { defaultTheme } from '../../../styles/themes/defaults'
 import { OrderContext } from '../../../contexts/OrderContext'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 
 type ProductItem = {
   id: string
@@ -34,13 +34,21 @@ interface ItemSelectedProps {
 }
 
 export function ItemSelected({ item }: ItemSelectedProps) {
-  const { removeItemToOrder } = useContext(OrderContext)
+  const {
+    removeItemToOrder,
+    incrementQuantityItemInCart,
+    decrementQuantityItemInCart,
+  } = useContext(OrderContext)
+
   const numberFormat = (value: number) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL',
     }).format(value)
   }
+
+  const isDisabledIncremetButton = item.quantity === item.stock
+  const isDisabledDecremetButton = item.quantity === 1
 
   return (
     <ItemSelectedContainer>
@@ -51,11 +59,17 @@ export function ItemSelected({ item }: ItemSelectedProps) {
             <span>{item.title}</span>
             <Actions>
               <Quantity>
-                <DecrementButton>
+                <DecrementButton
+                  disabled={isDisabledDecremetButton}
+                  onClick={() => decrementQuantityItemInCart(item)}
+                >
                   <Minus size={16} color={defaultTheme['purple-500']} />
                 </DecrementButton>
                 <span>{item.quantity}</span>
-                <IncrementButton>
+                <IncrementButton
+                  disabled={isDisabledIncremetButton}
+                  onClick={() => incrementQuantityItemInCart(item)}
+                >
                   <Plus size={16} color={defaultTheme['purple-500']} />
                 </IncrementButton>
               </Quantity>

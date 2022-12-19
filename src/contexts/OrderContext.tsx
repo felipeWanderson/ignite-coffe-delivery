@@ -40,6 +40,8 @@ interface OrderContextType {
   calculatedAmount: number
   addToCart: (product: Product, quantity: number) => void
   removeItemToOrder: (product: Product) => void
+  incrementQuantityItemInCart: (item: ProductItem) => void
+  decrementQuantityItemInCart: (item: ProductItem) => void
 }
 
 export const OrderContext = createContext({} as OrderContextType)
@@ -83,6 +85,43 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     }))
   }
 
+  const incrementQuantityItemInCart = (item: ProductItem) => {
+    const orderItens = order.itens.map((orderItem) => {
+      if (orderItem.id === item.id) {
+        return {
+          ...orderItem,
+          quantity: orderItem.quantity + 1,
+          price: (orderItem.quantity + 1) * orderItem.priceUnit,
+        }
+      }
+
+      return orderItem
+    })
+
+    setOrder((prevState) => ({
+      ...prevState,
+      itens: orderItens,
+    }))
+  }
+  const decrementQuantityItemInCart = (item: ProductItem) => {
+    const orderItens = order.itens.map((orderItem) => {
+      if (orderItem.id === item.id) {
+        return {
+          ...orderItem,
+          quantity: orderItem.quantity - 1,
+          price: (orderItem.quantity - 1) * orderItem.priceUnit,
+        }
+      }
+
+      return orderItem
+    })
+
+    setOrder((prevState) => ({
+      ...prevState,
+      itens: orderItens,
+    }))
+  }
+
   const quantityItensInCart = useMemo(() => {
     return order.itens
       .map((item) => item.quantity)
@@ -107,6 +146,8 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         removeItemToOrder,
         calculatedAmount,
         calculatedSubTotalAmount,
+        decrementQuantityItemInCart,
+        incrementQuantityItemInCart,
       }}
     >
       {children}
