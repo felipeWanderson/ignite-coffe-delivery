@@ -38,10 +38,12 @@ interface OrderContextType {
   quantityItensInCart: number
   calculatedSubTotalAmount: number
   calculatedAmount: number
+  selectedPaymetMethod: string
   addToCart: (product: Product, quantity: number) => void
   removeItemToOrder: (product: Product) => void
   incrementQuantityItemInCart: (item: ProductItem) => void
   decrementQuantityItemInCart: (item: ProductItem) => void
+  handleSelectedPaymentMethod: (method: string) => void
 }
 
 export const OrderContext = createContext({} as OrderContextType)
@@ -61,6 +63,8 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     valueDelivery: 3.5,
     amount: 0,
   } as Order)
+
+  const [selectedPaymetMethod, setSelectedPaymentMethod] = useState('')
 
   const addToCart = (product: Product, quantity: number) => {
     const productItem: ProductItem = {
@@ -122,6 +126,9 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     }))
   }
 
+  const handleSelectedPaymentMethod = (method: string) => {
+    setSelectedPaymentMethod(method)
+  }
   const quantityItensInCart = useMemo(() => {
     return order.itens
       .map((item) => item.quantity)
@@ -148,6 +155,8 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         calculatedSubTotalAmount,
         decrementQuantityItemInCart,
         incrementQuantityItemInCart,
+        selectedPaymetMethod,
+        handleSelectedPaymentMethod,
       }}
     >
       {children}
