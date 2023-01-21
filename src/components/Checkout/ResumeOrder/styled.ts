@@ -72,7 +72,7 @@ export const PaymentItem = styled.div<PaymentItemProps>`
       }
     `}
 `
-export const PlaceOrderButton = styled(Link)`
+export const PlaceOrderButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 export const FormAddressContainer = styled.div`
+  max-width: 56rem;
   width: 100%;
 
   display: flex;
@@ -8,8 +9,6 @@ export const FormAddressContainer = styled.div`
   align-items: flex-start;
   gap: 1.6rem;
 
-  width: 56rem;
-  height: 21.6rem;
   align-self: stretch;
 `
 

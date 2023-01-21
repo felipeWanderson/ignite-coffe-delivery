@@ -22,11 +22,22 @@ type ProductItem = {
   price: number
 }
 
+interface ShippingAddress {
+  zipCode: string
+  name: string
+  address1: string
+  address2: string
+  address3: string
+  neighborhood: string
+  city: string
+  state: string
+}
+
 type Order = {
   id: string
   status: string
   itens: ProductItem[] | []
-  shippingAddress: {}
+  shippingAddress: ShippingAddress
   paymentMethod: string
   subTotal: number
   valueDelivery: number
@@ -44,6 +55,7 @@ interface OrderContextType {
   incrementQuantityItemInCart: (item: ProductItem) => void
   decrementQuantityItemInCart: (item: ProductItem) => void
   handleSelectedPaymentMethod: (method: string) => void
+  updateShippingAddress: (address: ShippingAddress) => void
 }
 
 export const OrderContext = createContext({} as OrderContextType)
@@ -57,7 +69,7 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     id: new Date().getTime().toString(),
     status: 'INITIAL',
     itens: [],
-    shippingAddress: {},
+    shippingAddress: {} as ShippingAddress,
     paymentMethod: '',
     subTotal: 0,
     valueDelivery: 3.5,
@@ -144,6 +156,13 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     return calculatedSubTotalAmount + order.valueDelivery
   }, [calculatedSubTotalAmount, order.valueDelivery])
 
+  const updateShippingAddress = (address: ShippingAddress) => {
+    setOrder((prevState) => ({
+      ...prevState,
+      shippingAddress: address,
+    }))
+  }
+
   return (
     <OrderContext.Provider
       value={{
@@ -157,6 +176,7 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         incrementQuantityItemInCart,
         selectedPaymetMethod,
         handleSelectedPaymentMethod,
+        updateShippingAddress,
       }}
     >
       {children}
