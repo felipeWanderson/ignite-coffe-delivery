@@ -7,6 +7,7 @@ import * as zod from 'zod'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useContext, useMemo } from 'react'
 import { OrderContext } from '../../contexts/OrderContext'
+import { useNavigate } from 'react-router-dom'
 
 const createNewOrderValidationSchema = zod.object({
   shippingAddress: zod
@@ -26,7 +27,8 @@ const createNewOrderValidationSchema = zod.object({
 type NewOrderFormData = zod.infer<typeof createNewOrderValidationSchema>
 
 export function Checkout() {
-  const { order } = useContext(OrderContext)
+  const { order, updateOrder, finishedOrder } = useContext(OrderContext)
+  const navigate = useNavigate()
 
   const shippingAddress = useMemo(() => {
     return order.shippingAddress
@@ -38,10 +40,30 @@ export function Checkout() {
     },
   })
 
-  const { handleSubmit } = newOrderForm
+  const {
+    handleSubmit,
+    formState: { isValid },
+  } = newOrderForm
 
   function handleCreateNewOrder(data: NewOrderFormData) {
-    console.log(data)
+    if (!isValid) {
+      alert('Erro ao fechar o pedido!')
+      return
+    }
+
+    updateOrder({
+      ...order,
+      status: 'FINISHED',
+      shippingAddress: data?.shippingAddress,
+    })
+
+    finishedOrder({
+      ...order,
+      status: 'FINISHED',
+      shippingAddress: data?.shippingAddress,
+    })
+
+    navigate(`/checkout/order-confirmation/${order.id}`)
   }
   return (
     <CheckoutContainer>

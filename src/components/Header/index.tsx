@@ -13,7 +13,7 @@ import { useContext } from 'react'
 import { OrderContext } from '../../contexts/OrderContext'
 
 export function Header() {
-  const { quantityItensInCart = 0 } = useContext(OrderContext)
+  const { order, quantityItensInCart = 0 } = useContext(OrderContext)
   return (
     <HeaderContainer>
       <ImageContainer to="/">
@@ -27,7 +27,7 @@ export function Header() {
         </GeoLocalizationButton>
         <NavLink to="/checkout">
           <ShoppingCart size={22} weight="fill" />
-          {quantityItensInCart > 0 && (
+          {order.status !== 'FINISHED' && quantityItensInCart > 0 && (
             <Notification>{quantityItensInCart}</Notification>
           )}
         </NavLink>

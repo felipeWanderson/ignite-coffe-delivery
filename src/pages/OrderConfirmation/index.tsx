@@ -1,5 +1,9 @@
 import { CurrencyDollar, MapPin, Timer } from 'phosphor-react'
+import { useMemo } from 'react'
+import { useParams } from 'react-router-dom'
 import deliveryImage from '../../assets/images/delivery.svg'
+import { Order } from '../../contexts/OrderContext'
+import { orders } from '../../data'
 import {
   Info,
   OrderConfirmationContainer,
@@ -14,10 +18,30 @@ import {
 } from './styled'
 
 export function OrderConfirmation() {
+  const { id: orderId } = useParams()
+  const order = useMemo(() => {
+    return orders.find((order) => order.id === orderId) || ({} as Order)
+  }, [orderId])
+  const { shippingAddress, paymentMethod } = order
+
+  const paymentMethodText = useMemo(() => {
+    switch (paymentMethod) {
+      case 'credit_card':
+        return 'Cartão de Credito'
+      case 'cash':
+        return 'Dinheiro'
+      case 'debit':
+        return 'Cartão de Débito'
+
+      default:
+        break
+    }
+  }, [paymentMethod])
+
   return (
     <OrderConfirmationContainer>
       <Title>Uhu! Pedido confirmado</Title>
-      <Subtitle>Agora é só aguardar que logo o café chegará até você</Subtitle>
+      <Subtitle>{`Agora é só aguardar ${shippingAddress?.name}, que logo o café chegará até você`}</Subtitle>
       <OrderInfoContainer>
         <GradientBackground>
           <OrderInfo>
@@ -27,9 +51,15 @@ export function OrderConfirmation() {
               </InfoIcon>
               <Text>
                 <span>
-                  Emtrega em <strong>Rua Quarenta e Seis, 21</strong>
+                  Emtrega em{' '}
+                  <strong>{`${shippingAddress?.address1}, ${
+                    shippingAddress?.address2
+                  } ${
+                    shippingAddress?.address3 &&
+                    `, ${shippingAddress?.address3}`
+                  }`}</strong>
                 </span>
-                <span>São Raimundo - São Luís - MA</span>
+                <span>{`${shippingAddress?.neighborhood} - ${shippingAddress?.city} - ${shippingAddress?.state}`}</span>
               </Text>
             </Info>
             <Info>
@@ -47,7 +77,7 @@ export function OrderConfirmation() {
               </InfoIcon>
               <Text>
                 <span>Pagamento na Entrega</span>
-                <strong>Cartão de Crédito</strong>
+                <strong>{paymentMethodText}</strong>
               </Text>
             </Info>
           </OrderInfo>

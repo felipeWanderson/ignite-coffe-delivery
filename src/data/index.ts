@@ -1,3 +1,5 @@
+import { Order } from '../contexts/OrderContext'
+
 export const products = [
   {
     id: '1',
@@ -138,3 +140,5 @@ export const filters = [
   { id: '4', name: 'Alcoólico' },
   { id: '5', name: 'Gelado' },
 ]
+
+export const orders: Order[] = []

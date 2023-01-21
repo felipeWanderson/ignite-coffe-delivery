@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useMemo, useState } from 'react'
+import { orders } from '../data'
 
 type Product = {
   id: string
@@ -33,7 +34,7 @@ interface ShippingAddress {
   state: string
 }
 
-type Order = {
+export type Order = {
   id: string
   status: string
   itens: ProductItem[] | []
@@ -56,6 +57,8 @@ interface OrderContextType {
   decrementQuantityItemInCart: (item: ProductItem) => void
   handleSelectedPaymentMethod: (method: string) => void
   updateShippingAddress: (address: ShippingAddress) => void
+  updateOrder: (order: Order) => void
+  finishedOrder: (order: Order) => void
 }
 
 export const OrderContext = createContext({} as OrderContextType)
@@ -70,13 +73,14 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     status: 'INITIAL',
     itens: [],
     shippingAddress: {} as ShippingAddress,
-    paymentMethod: '',
+    paymentMethod: 'credit_card',
     subTotal: 0,
     valueDelivery: 3.5,
     amount: 0,
   } as Order)
 
-  const [selectedPaymetMethod, setSelectedPaymentMethod] = useState('')
+  const [selectedPaymetMethod, setSelectedPaymentMethod] =
+    useState('credit_card')
 
   const addToCart = (product: Product, quantity: number) => {
     const productItem: ProductItem = {
@@ -140,6 +144,10 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
 
   const handleSelectedPaymentMethod = (method: string) => {
     setSelectedPaymentMethod(method)
+    setOrder((prevState) => ({
+      ...prevState,
+      paymentMethod: method,
+    }))
   }
   const quantityItensInCart = useMemo(() => {
     return order.itens
@@ -148,12 +156,23 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
   }, [order.itens])
 
   const calculatedSubTotalAmount = useMemo(() => {
-    return order.itens
+    const subTotal = order.itens
       .map((item) => item.price)
       .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+
+    setOrder((prevState) => ({
+      ...prevState,
+      subTotal,
+    }))
+    return subTotal
   }, [order.itens])
   const calculatedAmount = useMemo(() => {
-    return calculatedSubTotalAmount + order.valueDelivery
+    const amount = calculatedSubTotalAmount + order.valueDelivery
+    setOrder((prevState) => ({
+      ...prevState,
+      amount,
+    }))
+    return amount
   }, [calculatedSubTotalAmount, order.valueDelivery])
 
   const updateShippingAddress = (address: ShippingAddress) => {
@@ -161,6 +180,28 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
       ...prevState,
       shippingAddress: address,
     }))
+  }
+
+  const updateOrder = (order: Order) => {
+    setOrder((prevState) => ({
+      ...prevState,
+      ...order,
+    }))
+  }
+
+  const finishedOrder = (order: Order) => {
+    orders.push(order)
+    setOrder({
+      id: new Date().getTime().toString(),
+      status: 'INITIAL',
+      itens: [],
+      shippingAddress: {} as ShippingAddress,
+      paymentMethod: 'credit_card',
+      subTotal: 0,
+      valueDelivery: 3.5,
+      amount: 0,
+    } as Order)
+    handleSelectedPaymentMethod('credit_card')
   }
 
   return (
@@ -177,6 +218,8 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         selectedPaymetMethod,
         handleSelectedPaymentMethod,
         updateShippingAddress,
+        updateOrder,
+        finishedOrder,
       }}
     >
       {children}
