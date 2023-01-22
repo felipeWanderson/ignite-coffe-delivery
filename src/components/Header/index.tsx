@@ -11,6 +11,7 @@ import { MapPin, ShoppingCart } from 'phosphor-react'
 import { NavLink } from 'react-router-dom'
 import { useContext } from 'react'
 import { OrderContext } from '../../contexts/OrderContext'
+import { ORDER_COMPLETED } from '../../contants'
 
 export function Header() {
   const { order, quantityItensInCart = 0 } = useContext(OrderContext)
@@ -27,7 +28,7 @@ export function Header() {
         </GeoLocalizationButton>
         <NavLink to="/checkout">
           <ShoppingCart size={22} weight="fill" />
-          {order.status !== 'FINISHED' && quantityItensInCart > 0 && (
+          {order.status !== ORDER_COMPLETED && quantityItensInCart > 0 && (
             <Notification>{quantityItensInCart}</Notification>
           )}
         </NavLink>

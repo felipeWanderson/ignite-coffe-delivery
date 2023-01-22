@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useMemo, useState } from 'react'
+import { CREDIT_CARD, ORDER_INITIAL } from '../contants'
 import { orders } from '../data'
 
 type Product = {
@@ -70,17 +71,16 @@ interface OrderContextProviderProps {
 export function OrderContextProvider({ children }: OrderContextProviderProps) {
   const [order, setOrder] = useState({
     id: new Date().getTime().toString(),
-    status: 'INITIAL',
+    status: ORDER_INITIAL,
     itens: [],
     shippingAddress: {} as ShippingAddress,
-    paymentMethod: 'credit_card',
+    paymentMethod: CREDIT_CARD,
     subTotal: 0,
     valueDelivery: 3.5,
     amount: 0,
   } as Order)
 
-  const [selectedPaymetMethod, setSelectedPaymentMethod] =
-    useState('credit_card')
+  const [selectedPaymetMethod, setSelectedPaymentMethod] = useState(CREDIT_CARD)
 
   const addToCart = (product: Product, quantity: number) => {
     const productItem: ProductItem = {
@@ -189,19 +189,23 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     }))
   }
 
-  const finishedOrder = (order: Order) => {
-    orders.push(order)
+  const initialDateOrder = () => {
     setOrder({
       id: new Date().getTime().toString(),
-      status: 'INITIAL',
+      status: ORDER_INITIAL,
       itens: [],
       shippingAddress: {} as ShippingAddress,
-      paymentMethod: 'credit_card',
+      paymentMethod: CREDIT_CARD,
       subTotal: 0,
       valueDelivery: 3.5,
       amount: 0,
     } as Order)
-    handleSelectedPaymentMethod('credit_card')
+    handleSelectedPaymentMethod(CREDIT_CARD)
+  }
+
+  const finishedOrder = (order: Order) => {
+    orders.push(order)
+    initialDateOrder()
   }
 
   return (

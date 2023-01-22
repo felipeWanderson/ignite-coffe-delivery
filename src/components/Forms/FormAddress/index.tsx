@@ -5,19 +5,9 @@ import { Input } from '../input'
 import { FormAddressContainer, InputGroup } from './styled'
 
 export function FormAddress() {
-  const { order, updateShippingAddress } = useContext(OrderContext)
-  const shippingAddressInOrder = useMemo(() => {
-    return order.shippingAddress
-  }, [order])
-  const {
-    control,
-    formState: {
-      defaultValues = {
-        shippingAddress: shippingAddressInOrder,
-      },
-    },
-    setValue,
-  } = useFormContext()
+  const { updateShippingAddress } = useContext(OrderContext)
+
+  const { control, setValue } = useFormContext()
 
   const updateAddress = useCallback(
     async (zipCode: string) => {

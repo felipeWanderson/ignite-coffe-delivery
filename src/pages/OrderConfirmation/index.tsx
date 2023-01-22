@@ -2,6 +2,7 @@ import { CurrencyDollar, MapPin, Timer } from 'phosphor-react'
 import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import deliveryImage from '../../assets/images/delivery.svg'
+import { CASH, CREDIT_CARD, DEBIT_CARD } from '../../contants'
 import { Order } from '../../contexts/OrderContext'
 import { orders } from '../../data'
 import {
@@ -26,11 +27,11 @@ export function OrderConfirmation() {
 
   const paymentMethodText = useMemo(() => {
     switch (paymentMethod) {
-      case 'credit_card':
+      case CREDIT_CARD:
         return 'Cartão de Credito'
-      case 'cash':
+      case CASH:
         return 'Dinheiro'
-      case 'debit':
+      case DEBIT_CARD:
         return 'Cartão de Débito'
 
       default:
