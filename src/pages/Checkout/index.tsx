@@ -27,7 +27,7 @@ const createNewOrderValidationSchema = zod.object({
 type NewOrderFormData = zod.infer<typeof createNewOrderValidationSchema>
 
 export function Checkout() {
-  const { order, updateOrder, finishedOrder } = useContext(OrderContext)
+  const { order, finishedOrder } = useContext(OrderContext)
   const navigate = useNavigate()
 
   const shippingAddress = useMemo(() => {
@@ -50,12 +50,6 @@ export function Checkout() {
       alert('Erro ao fechar o pedido!')
       return
     }
-
-    updateOrder({
-      ...order,
-      status: 'FINISHED',
-      shippingAddress: data?.shippingAddress,
-    })
 
     finishedOrder({
       ...order,

@@ -11,9 +11,8 @@ import {
 } from './styled'
 
 export function ResumeOrder() {
-  const { order, calculatedAmount, calculatedSubTotalAmount } =
-    useContext(OrderContext)
-  const { valueDelivery, itens } = order
+  const { order } = useContext(OrderContext)
+  const { valueDelivery, itens, amount, subTotal } = order
 
   const numberFormat = (value: number) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -33,7 +32,7 @@ export function ResumeOrder() {
         <ResumePayment>
           <PaymentItem>
             <span>Total de Itens</span>
-            <span>{numberFormat(calculatedSubTotalAmount)}</span>
+            <span>{numberFormat(subTotal)}</span>
           </PaymentItem>
           <PaymentItem>
             <span>Entrega</span>
@@ -41,7 +40,7 @@ export function ResumeOrder() {
           </PaymentItem>
           <PaymentItem emphasis>
             <span>Total</span>
-            <span>{numberFormat(calculatedAmount)}</span>
+            <span>{numberFormat(amount)}</span>
           </PaymentItem>
         </ResumePayment>
 

@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useMemo, useState } from 'react'
+import { createContext, ReactNode, useMemo, useReducer, useState } from 'react'
 import { CREDIT_CARD, ORDER_INITIAL } from '../contants'
 import { orders } from '../data'
 
@@ -46,11 +46,14 @@ export type Order = {
   amount: number
 }
 
+interface OrderState {
+  order: Order
+  selectedPaymetMethod: string
+}
+
 interface OrderContextType {
   order: Order
   quantityItensInCart: number
-  calculatedSubTotalAmount: number
-  calculatedAmount: number
   selectedPaymetMethod: string
   addToCart: (product: Product, quantity: number) => void
   removeItemToOrder: (product: Product) => void
@@ -58,7 +61,6 @@ interface OrderContextType {
   decrementQuantityItemInCart: (item: ProductItem) => void
   handleSelectedPaymentMethod: (method: string) => void
   updateShippingAddress: (address: ShippingAddress) => void
-  updateOrder: (order: Order) => void
   finishedOrder: (order: Order) => void
 }
 
@@ -69,18 +71,204 @@ interface OrderContextProviderProps {
 }
 
 export function OrderContextProvider({ children }: OrderContextProviderProps) {
-  const [order, setOrder] = useState({
-    id: new Date().getTime().toString(),
-    status: ORDER_INITIAL,
-    itens: [],
-    shippingAddress: {} as ShippingAddress,
-    paymentMethod: CREDIT_CARD,
-    subTotal: 0,
-    valueDelivery: 3.5,
-    amount: 0,
-  } as Order)
+  const [orderState, dispach] = useReducer(
+    (state: OrderState, action: any) => {
+      if (action.type === 'ADD_TO_CART') {
+        const product = state.order.itens.find(
+          (item) => item.id === action.payload.productItem.id,
+        )
 
-  const [selectedPaymetMethod, setSelectedPaymentMethod] = useState(CREDIT_CARD)
+        if (!product) {
+          const itens = [...state.order.itens, action.payload.productItem]
+          const subTotal = itens
+            .map((item) => item.price)
+            .reduce(
+              (accumulator, currentValue) => accumulator + currentValue,
+              0,
+            )
+          const amount = subTotal + state.order.valueDelivery
+          return {
+            ...state,
+            order: {
+              ...state.order,
+              itens,
+              subTotal,
+              amount,
+            },
+          }
+        }
+
+        const itens = state.order.itens.map((item) => {
+          if (item.id === action.payload.productItem.id) {
+            const quantity = item.quantity + action.payload.productItem.quantity
+
+            return {
+              ...item,
+              quantity,
+              price: item.priceUnit * quantity,
+            }
+          }
+
+          return item
+        })
+
+        const subTotal = itens
+          .map((item) => item.price)
+          .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+        const amount = subTotal + state.order.valueDelivery
+        return {
+          ...state,
+          order: {
+            ...state.order,
+            itens,
+            subTotal,
+            amount,
+          },
+        }
+      }
+      if (action.type === 'REMOVE_ITEM_TO_ORDER') {
+        const { itens } = state.order
+        const itensInCart = itens.filter(
+          (itens) => itens.id !== action.payload.id,
+        )
+
+        console.log('itensInCart', itensInCart)
+
+        const subTotal = itensInCart
+          .map((item) => item.price)
+          .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+        const amount = subTotal + state.order.valueDelivery
+        return {
+          ...state,
+          order: {
+            ...state.order,
+            itens: itensInCart,
+            subTotal,
+            amount,
+          },
+        }
+      }
+
+      if (action.type === 'INCREMENT_QUANTITY_ITEM_IN_CART') {
+        const { item } = action.payload
+        const orderItens = state.order.itens.map((orderItem) => {
+          if (orderItem.id === item.id) {
+            return {
+              ...orderItem,
+              quantity: orderItem.quantity + 1,
+              price: (orderItem.quantity + 1) * orderItem.priceUnit,
+            }
+          }
+
+          return orderItem
+        })
+
+        const subTotal = orderItens
+          .map((item) => item.price)
+          .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+        const amount = subTotal + state.order.valueDelivery
+
+        return {
+          ...state,
+          order: {
+            ...state.order,
+            itens: orderItens,
+            subTotal,
+            amount,
+          },
+        }
+      }
+      if (action.type === 'DECREMENT_QUANTITY_ITEM_IN_CART') {
+        const { item } = action.payload
+        const orderItens = state.order.itens.map((orderItem) => {
+          if (orderItem.id === item.id) {
+            return {
+              ...orderItem,
+              quantity: orderItem.quantity - 1,
+              price: (orderItem.quantity - 1) * orderItem.priceUnit,
+            }
+          }
+
+          return orderItem
+        })
+
+        const subTotal = orderItens
+          .map((item) => item.price)
+          .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+        const amount = subTotal + state.order.valueDelivery
+        return {
+          ...state,
+          order: {
+            ...state.order,
+            itens: orderItens,
+            subTotal,
+            amount,
+          },
+        }
+      }
+      if (action.type === 'SELECTED_PAYMENT_METHOD') {
+        return {
+          ...state,
+          selectedPaymetMethod: action.payload.mthod,
+        }
+      }
+
+      if (action.type === 'UPDATE_SHIPPING_ADDRESS') {
+        return {
+          ...state,
+          order: {
+            ...state.order,
+            shippingAddress: action.payload.shippingAddress,
+          },
+        }
+      }
+
+      if (action.type === 'FINISHED_ORDER') {
+        const { status, shippingAddress } = action.payload
+
+        return {
+          ...state,
+          order: {
+            ...state.order,
+            status,
+            shippingAddress,
+          },
+        }
+      }
+      if (action.type === 'INITIAL_ORDER') {
+        return {
+          order: {
+            id: new Date().getTime().toString(),
+            status: ORDER_INITIAL,
+            itens: [],
+            shippingAddress: {} as ShippingAddress,
+            paymentMethod: CREDIT_CARD,
+            subTotal: 0,
+            valueDelivery: 3.5,
+            amount: 0,
+          } as Order,
+          selectedPaymetMethod: CREDIT_CARD,
+        }
+      }
+
+      return state
+    },
+    {
+      order: {
+        id: new Date().getTime().toString(),
+        status: ORDER_INITIAL,
+        itens: [],
+        shippingAddress: {} as ShippingAddress,
+        paymentMethod: CREDIT_CARD,
+        subTotal: 0,
+        valueDelivery: 3.5,
+        amount: 0,
+      } as Order,
+      selectedPaymetMethod: CREDIT_CARD,
+    },
+  )
+
+  const { order, selectedPaymetMethod } = orderState
 
   const addToCart = (product: Product, quantity: number) => {
     const productItem: ProductItem = {
@@ -89,65 +277,48 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
       quantity,
       price: product.price * quantity,
     }
-    const itens = [...order.itens, productItem]
-    setOrder((prevState) => ({
-      ...prevState,
-      itens,
-    }))
+
+    dispach({
+      type: 'ADD_TO_CART',
+      payload: {
+        productItem,
+      },
+    })
   }
 
   const removeItemToOrder = (product: Product) => {
-    const { itens } = order
-    const itensInCart = itens.filter((itens) => itens.id !== product.id)
-    setOrder((prevState) => ({
-      ...prevState,
-      itens: itensInCart,
-    }))
+    dispach({
+      type: 'REMOVE_ITEM_TO_ORDER',
+      payload: {
+        id: product.id,
+      },
+    })
   }
 
   const incrementQuantityItemInCart = (item: ProductItem) => {
-    const orderItens = order.itens.map((orderItem) => {
-      if (orderItem.id === item.id) {
-        return {
-          ...orderItem,
-          quantity: orderItem.quantity + 1,
-          price: (orderItem.quantity + 1) * orderItem.priceUnit,
-        }
-      }
-
-      return orderItem
+    dispach({
+      type: 'INCREMENT_QUANTITY_ITEM_IN_CART',
+      payload: {
+        item,
+      },
     })
-
-    setOrder((prevState) => ({
-      ...prevState,
-      itens: orderItens,
-    }))
   }
   const decrementQuantityItemInCart = (item: ProductItem) => {
-    const orderItens = order.itens.map((orderItem) => {
-      if (orderItem.id === item.id) {
-        return {
-          ...orderItem,
-          quantity: orderItem.quantity - 1,
-          price: (orderItem.quantity - 1) * orderItem.priceUnit,
-        }
-      }
-
-      return orderItem
+    dispach({
+      type: 'DECREMENT_QUANTITY_ITEM_IN_CART',
+      payload: {
+        item,
+      },
     })
-
-    setOrder((prevState) => ({
-      ...prevState,
-      itens: orderItens,
-    }))
   }
 
   const handleSelectedPaymentMethod = (method: string) => {
-    setSelectedPaymentMethod(method)
-    setOrder((prevState) => ({
-      ...prevState,
-      paymentMethod: method,
-    }))
+    dispach({
+      type: 'SELECTED_PAYMENT_METHOD',
+      payload: {
+        paymentMethod: method,
+      },
+    })
   }
   const quantityItensInCart = useMemo(() => {
     return order.itens
@@ -155,55 +326,30 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
       .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
   }, [order.itens])
 
-  const calculatedSubTotalAmount = useMemo(() => {
-    const subTotal = order.itens
-      .map((item) => item.price)
-      .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
-
-    setOrder((prevState) => ({
-      ...prevState,
-      subTotal,
-    }))
-    return subTotal
-  }, [order.itens])
-  const calculatedAmount = useMemo(() => {
-    const amount = calculatedSubTotalAmount + order.valueDelivery
-    setOrder((prevState) => ({
-      ...prevState,
-      amount,
-    }))
-    return amount
-  }, [calculatedSubTotalAmount, order.valueDelivery])
-
   const updateShippingAddress = (address: ShippingAddress) => {
-    setOrder((prevState) => ({
-      ...prevState,
-      shippingAddress: address,
-    }))
-  }
-
-  const updateOrder = (order: Order) => {
-    setOrder((prevState) => ({
-      ...prevState,
-      ...order,
-    }))
+    dispach({
+      type: 'UPDATE_SHIPPING_ADDRESS',
+      payload: {
+        shippingAddress: address,
+      },
+    })
   }
 
   const initialDateOrder = () => {
-    setOrder({
-      id: new Date().getTime().toString(),
-      status: ORDER_INITIAL,
-      itens: [],
-      shippingAddress: {} as ShippingAddress,
-      paymentMethod: CREDIT_CARD,
-      subTotal: 0,
-      valueDelivery: 3.5,
-      amount: 0,
-    } as Order)
-    handleSelectedPaymentMethod(CREDIT_CARD)
+    dispach({
+      type: 'INITIAL_ORDER',
+      payload: {},
+    })
   }
 
   const finishedOrder = (order: Order) => {
+    dispach({
+      type: 'FINISHED_ORDER',
+      payload: {
+        status: order?.status,
+        shippingAddress: order?.shippingAddress,
+      },
+    })
     orders.push(order)
     initialDateOrder()
   }
@@ -215,14 +361,11 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         addToCart,
         quantityItensInCart,
         removeItemToOrder,
-        calculatedAmount,
-        calculatedSubTotalAmount,
         decrementQuantityItemInCart,
         incrementQuantityItemInCart,
         selectedPaymetMethod,
         handleSelectedPaymentMethod,
         updateShippingAddress,
-        updateOrder,
         finishedOrder,
       }}
     >
